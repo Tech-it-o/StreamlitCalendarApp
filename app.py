@@ -59,9 +59,7 @@ def main():
             flow = create_flow()
             auth_url = generate_auth_url(flow)
             if st.button("🔐 ล็อกอินด้วย Google"):
-                st.experimental_set_query_params(redirect=auth_url)
-                st.markdown(f"กำลังพาไปยังหน้า Google Login... หากไม่ได้ไปอัตโนมัติ [คลิกที่นี่]({auth_url})")
-                st.markdown(f"""<meta http-equiv="refresh" content="0;url={auth_url}">""", unsafe_allow_html=True)
+                st.markdown(f"[คลิกที่นี่เพื่อเข้าสู่ระบบด้วย Google]({auth_url})")
                 st.stop()
 
     # ถ้า login แล้ว
