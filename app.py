@@ -1,35 +1,53 @@
 import streamlit as st
 import datetime
-import os.path
-from google.oauth2.credentials import Credentials
-from google_auth_oauthlib.flow import InstalledAppFlow
-from google.auth.transport.requests import Request
+import json
+import os
+import pathlib
+import uuid
+
+from google_auth_oauthlib.flow import Flow
 from googleapiclient.discovery import build
+from google.oauth2.credentials import Credentials
 
-# ตั้ง Scope ที่ใช้เข้าถึง Google Calendar
 SCOPES = ['https://www.googleapis.com/auth/calendar']
+REDIRECT_URI = "https://your-app-name.streamlit.app"  # เปลี่ยนเป็นชื่อ app จริง
 
-# ฟังก์ชัน login เพื่อรับ credentials
-def login():
-    creds = None
-    if os.path.exists("token.json"):
-        creds = Credentials.from_authorized_user_file("token.json", SCOPES)
+def get_flow():
+    return Flow.from_client_config(
+        {
+            "web": {
+                "client_id": st.secrets["client_id"],
+                "client_secret": st.secrets["client_secret"],
+                "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+                "token_uri": "https://oauth2.googleapis.com/token",
+                "redirect_uris": [REDIRECT_URI],
+            }
+        },
+        scopes=SCOPES,
+        redirect_uri=REDIRECT_URI
+    )
 
-    if not creds or not creds.valid:
-        if creds and creds.expired and creds.refresh_token:
-            creds.refresh(Request())
-        else:
-            flow = InstalledAppFlow.from_client_secrets_file("client_secret_58410467583-f3udl0q7m082pejkjg01l40gsa8qngqn.apps.googleusercontent.com.json", SCOPES)
-            creds = flow.run_local_server(port=0)
+# 1. Step 1 - Login
+if "credentials" not in st.session_state:
+    flow = get_flow()
+    auth_url, _ = flow.authorization_url(prompt='consent')
+    st.markdown(f"[🔐 ล็อกอินด้วยบัญชี Google เพื่อใช้งาน Calendar]({auth_url})")
+    code = st.text_input("🔑 วางโค้ด (code) จากลิงก์ Google ที่ได้หลังจากล็อกอิน:")
+    if st.button("ยืนยันโค้ด"):
+        try:
+            flow.fetch_token(code=code)
+            creds = flow.credentials
+            st.session_state.credentials = json.loads(creds.to_json())
+            st.success("✅ ล็อกอินสำเร็จ!")
+        except Exception as e:
+            st.error(f"❌ ล็อกอินล้มเหลว: {e}")
+    st.stop()
 
-        # Save the credentials for the next run
-        with open("token.json", "w") as token:
-            token.write(creds.to_json())
+# 2. Step 2 - Add calendar event
+creds = Credentials.from_authorized_user_info(st.session_state.credentials)
+service = build("calendar", "v3", credentials=creds)
 
-    return creds
-
-# UI สำหรับกรอกข้อมูล
-st.title("🗓️ เพิ่มกิจกรรมลง Google Calendar")
+st.title("📆 เพิ่มกิจกรรมลง Google Calendar ของคุณ")
 
 with st.form("event_form"):
     summary = st.text_input("หัวข้อกิจกรรม", "ประชุมทีม")
@@ -39,9 +57,6 @@ with st.form("event_form"):
     submitted = st.form_submit_button("เพิ่มกิจกรรม")
 
 if submitted:
-    creds = login()
-    service = build("calendar", "v3", credentials=creds)
-
     event = {
         'summary': summary,
         'location': location,
@@ -56,4 +71,4 @@ if submitted:
     }
 
     created_event = service.events().insert(calendarId='primary', body=event).execute()
-    st.success(f"✅ เพิ่มกิจกรรมสำเร็จ: [คลิกดูใน Calendar]({created_event.get('htmlLink')})")
+    st.success(f"✅ เพิ่มกิจกรรมเรียบร้อย! [ดูใน Calendar]({created_event.get('htmlLink')})")
