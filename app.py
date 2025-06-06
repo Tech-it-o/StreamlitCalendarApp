@@ -57,6 +57,7 @@ def main():
                 return
         else:
             flow = create_flow()
+            auth_url = generate_auth_url(flow)
             st.markdown(f'''
                 <a href="{auth_url}" target="_self" style="text-decoration:none">
                     <button style="
