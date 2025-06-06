@@ -62,12 +62,12 @@ def main():
             st.markdown(f'''
                 <a href="{auth_url}" target="_blank" rel="noopener noreferrer" style="text-decoration:none">
                     <button style="
-                        background-color: #6a0dad;
+                        background-color: #663399;
                         border: none;
                         color: white;
-                        padding: 14px 30px;
-                        font-size: 18px;
-                        border-radius: 12px;
+                        padding: 8px 20px;
+                        font-size: 14px;
+                        border-radius: 8px;
                         cursor: pointer;
                         font-weight: bold;
                         box-shadow: 0 4px 10px rgba(106, 13, 173, 0.5);
