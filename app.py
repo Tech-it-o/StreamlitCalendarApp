@@ -81,7 +81,7 @@ def main():
                 </a>
             ''', unsafe_allow_html=True)
 
-            st.image("Artboard_32x.png", width=600)
+            st.image("Artboard_32x.png", width=700)
 
             st.stop()
             
