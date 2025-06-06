@@ -58,8 +58,9 @@ def main():
         else:
             flow = create_flow()
             auth_url = generate_auth_url(flow)
+            
             st.markdown(f'''
-                <a href="{auth_url}" target="_self" style="text-decoration:none">
+                <a href="{auth_url}" target="_blank" rel="noopener noreferrer" style="text-decoration:none">
                     <button style="
                         background-color:#4CAF50;
                         border:none;
