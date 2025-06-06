@@ -58,7 +58,25 @@ def main():
         else:
             flow = create_flow()
             auth_url = generate_auth_url(flow)
-            st.markdown(f"[🔐 ล็อกอินด้วย Google]({auth_url})")
+            st.markdown(f'''
+                <a href="{auth_url}" target="_self" style="text-decoration:none">
+                    <button style="
+                        background-color:#4CAF50; /* สีเขียว */
+                        border:none;
+                        color:white;
+                        padding:12px 24px;
+                        text-align:center;
+                        text-decoration:none;
+                        display:inline-block;
+                        font-size:16px;
+                        border-radius:8px;
+                        cursor:pointer;
+                    ">
+                        🔐 ล็อกอินด้วย Google
+                    </button>
+                </a>
+            ''', unsafe_allow_html=True)
+
             st.stop()
 
     # ถ้า login แล้ว
