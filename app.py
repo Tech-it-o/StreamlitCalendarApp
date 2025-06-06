@@ -81,7 +81,10 @@ def main():
                 </a>
             ''', unsafe_allow_html=True)
 
+            st.image("Artboard_32x.png", width=400)
+
             st.stop()
+            
 
     # ถ้า login แล้ว
     creds = Credentials(**st.session_state["credentials"])
