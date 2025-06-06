@@ -52,17 +52,23 @@ def main():
                 }
                 st.success("🎉 ล็อกอินสำเร็จ! พร้อมใช้งานแล้ว")
                 st.experimental_rerun()
+                return
             except Exception as e:
                 st.error(f"เกิดข้อผิดพลาด: {e}")
                 return
         else:
             flow = create_flow()
             auth_url = generate_auth_url(flow)
+            st.markdown("## กรุณาเข้าสู่ระบบด้วยบัญชี Google ก่อนใช้งาน")
             if st.button("🔐 ล็อกอินด้วย Google"):
-                st.markdown(f'<meta http-equiv="refresh" content="0; url={auth_url}">', unsafe_allow_html=True)
-                return
+                st.markdown(
+                    f'<meta http-equiv="refresh" content="0; url={auth_url}">', 
+                    unsafe_allow_html=True
+                )
+            st.stop()  # ✅ หยุดรันที่นี่ ไม่ไปต่อ
+            return      # ✅ เสริมความชัวร์
 
-    # ถ้า login แล้ว
+    # โค้ดส่วนนี้จะรันเฉพาะตอนที่มี credentials แล้วเท่านั้น
     creds = Credentials(**st.session_state["credentials"])
     service = create_service(creds)
 
