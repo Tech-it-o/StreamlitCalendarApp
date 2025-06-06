@@ -58,18 +58,24 @@ def main():
         else:
             flow = create_flow()
             auth_url = generate_auth_url(flow)
-            
+
             st.markdown(f'''
                 <a href="{auth_url}" target="_blank" rel="noopener noreferrer" style="text-decoration:none">
                     <button style="
-                        background-color:#4CAF50;
-                        border:none;
-                        color:white;
-                        padding:12px 24px;
-                        font-size:16px;
-                        border-radius:8px;
-                        cursor:pointer;
-                    ">
+                        background-color: #6a0dad;
+                        border: none;
+                        color: white;
+                        padding: 14px 30px;
+                        font-size: 18px;
+                        border-radius: 12px;
+                        cursor: pointer;
+                        font-weight: bold;
+                        box-shadow: 0 4px 10px rgba(106, 13, 173, 0.5);
+                        transition: background-color 0.3s ease, box-shadow 0.3s ease;
+                    " 
+                    onmouseover="this.style.backgroundColor='#7b29e1'; this.style.boxShadow='0 6px 14px rgba(123, 41, 225, 0.7)';"
+                    onmouseout="this.style.backgroundColor='#6a0dad'; this.style.boxShadow='0 4px 10px rgba(106, 13, 173, 0.5)';"
+                    >
                         🔐 ล็อกอินด้วย Google
                     </button>
                 </a>
