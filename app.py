@@ -37,9 +37,11 @@ def main():
 
     # ถ้ายังไม่ได้ login
     if "credentials" not in st.session_state:
+        code = st.text_input("📥 วางรหัส code จาก URL (พารามิเตอร์ `?code=...`):")
+
         if code:
-            flow = create_flow()
             try:
+                flow = create_flow()
                 flow.fetch_token(code=code)
                 creds = flow.credentials
                 st.session_state["credentials"] = {
@@ -54,13 +56,13 @@ def main():
                 st.experimental_rerun()
             except Exception as e:
                 st.error(f"เกิดข้อผิดพลาด: {e}")
-                return
         else:
             flow = create_flow()
             auth_url = generate_auth_url(flow)
-            if st.button("🔐 ล็อกอินด้วย Google"):
-                st.markdown(f"[คลิกที่นี่เพื่อเข้าสู่ระบบด้วย Google]({auth_url})")
-                st.stop()
+            st.markdown(f"### 🔐 ยังไม่ได้ล็อกอิน")
+            st.markdown(f"[👉 คลิกเพื่อเข้าสู่ระบบด้วย Google]({auth_url})")
+            st.stop()
+
 
     # ถ้า login แล้ว
     creds = Credentials(**st.session_state["credentials"])
