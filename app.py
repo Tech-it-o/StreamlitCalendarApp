@@ -81,7 +81,25 @@ def main():
                 </a>
             ''', unsafe_allow_html=True)
 
-            st.image("Artboard_32x.png", width=400)
+            with open("Artboard_32x.png", "rb") as file:
+                img_bytes = file.read()
+
+            # แสดงรูปตรงกลางโดยใช้ st.image พร้อมการจัดกึ่งกลาง
+            st.markdown(
+                """
+                <style>
+                .center-img {
+                    display: flex;
+                    justify-content: center;
+                }
+                </style>
+                """,
+                unsafe_allow_html=True
+            )
+
+            st.markdown('<div class="center-img">', unsafe_allow_html=True)
+            st.image(img_bytes, width=400)
+            st.markdown('</div>', unsafe_allow_html=True)
 
             st.stop()
             
