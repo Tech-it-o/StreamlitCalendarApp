@@ -58,8 +58,9 @@ def main():
         else:
             flow = create_flow()
             auth_url = generate_auth_url(flow)
-            st.markdown(f"[🔐 ล็อกอินด้วย Google]({auth_url})")
-            st.stop()
+            if st.button("🔐 ล็อกอินด้วย Google"):
+                st.markdown(f'<meta http-equiv="refresh" content="0; url={auth_url}">', unsafe_allow_html=True)
+                st.stop()
 
     # ถ้า login แล้ว
     creds = Credentials(**st.session_state["credentials"])
